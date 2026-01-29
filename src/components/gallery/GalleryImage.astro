@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  eager?: boolean;
+}
+
+const { src, alt, caption, eager = false } = Astro.props;
+---
+
+<figure class="group">
+  <div class="overflow-hidden rounded-lg">
+    <Image
+      src={src}
+      alt={alt}
+      widths={[400, 800, 1200]}
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+      loading={eager ? 'eager' : 'lazy'}
+      decoding={eager ? 'sync' : 'async'}
+    />
+  </div>
+  {caption && (
+    <figcaption class="mt-2 text-sm text-gray-600 text-center">
+      {caption}
+    </figcaption>
+  )}
+</figure>

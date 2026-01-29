@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+---
+
+<BaseLayout
+  title="À propos"
+  description="Découvrez mon parcours de photographe passionné et ma démarche artistique."
+>
+  <JsonLd
+    type="Person"
+    data={{
+      name: 'Photographe',
+      url: Astro.site,
+      image: new URL('/og-default.jpg', Astro.site).toString(),
+      jobTitle: 'Photographe',
+      description: 'Photographe passionné partageant des moments capturés chaque semaine.',
+      sameAs: [],
+    }}
+  />
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">À propos</h1>
+      <p class="text-xl text-gray-600">
+        Photographe passionné, je capture des moments uniques et les partage avec vous.
+      </p>
+    </header>
+
+    <div class="prose">
+      <h2>Mon parcours</h2>
+      <p>
+        La photographie est pour moi bien plus qu'un simple hobby - c'est une façon de voir le monde
+        et de capturer ces instants fugaces qui font la beauté de notre quotidien.
+      </p>
+      <p>
+        Chaque semaine, je partage sur ce blog mes dernières explorations photographiques,
+        accompagnées des histoires et des réflexions qui les accompagnent.
+      </p>
+
+      <h2>Ma démarche</h2>
+      <p>
+        Je m'intéresse particulièrement aux paysages, à la nature et aux moments de vie authentiques.
+        Mon approche privilégie la lumière naturelle et les compositions épurées.
+      </p>
+
+      <h2>Équipement</h2>
+      <ul>
+        <li>Appareil photo principal</li>
+        <li>Objectifs variés pour différentes situations</li>
+        <li>Trépied pour les longues expositions</li>
+        <li>Filtres pour la photographie de paysage</li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p>
+        Vous pouvez me contacter à l'adresse suivante :
+        <a href="mailto:contact@example.com">contact@example.com</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>

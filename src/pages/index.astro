@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/blog/PostList.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+---
+
+<BaseLayout
+  title="Portfolio - Photographie"
+  description="Blog photo hebdomadaire et galerie de photographies. Découvrez mes dernières captures et explorations visuelles."
+>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-b from-gray-50 to-white py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6">
+        Bienvenue sur mon Portfolio
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+        Photographe passionné, je partage chaque semaine mes plus belles captures.
+        Explorez mes galeries et laissez-vous transporter par mes images.
+      </p>
+      <div class="flex justify-center gap-4">
+        <a
+          href="/blog"
+          class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+        >
+          Voir le blog
+        </a>
+        <a
+          href="/about"
+          class="inline-flex items-center px-6 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+        >
+          À propos
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Posts Section -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold text-gray-900">Articles récents</h2>
+        <a
+          href="/blog"
+          class="text-primary-600 hover:text-primary-800 font-medium"
+        >
+          Voir tous les articles &rarr;
+        </a>
+      </div>
+
+      <PostList posts={posts} limit={3} />
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-gray-900 py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">
+        Envie de collaborer ?
+      </h2>
+      <p class="text-gray-300 mb-8">
+        Je suis disponible pour des projets photo, des collaborations ou simplement pour échanger sur notre passion commune.
+      </p>
+      <a
+        href="mailto:contact@example.com"
+        class="inline-flex items-center px-6 py-3 bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+      >
+        Me contacter
+      </a>
+    </div>
+  </section>
+</BaseLayout>

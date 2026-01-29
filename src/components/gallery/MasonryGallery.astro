@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+
+interface GalleryImage {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  images: GalleryImage[];
+  columns?: 2 | 3 | 4;
+}
+
+const { images, columns = 3 } = Astro.props;
+
+const columnClasses = {
+  2: 'columns-1 sm:columns-2',
+  3: 'columns-1 sm:columns-2 lg:columns-3',
+  4: 'columns-1 sm:columns-2 lg:columns-3 xl:columns-4',
+};
+---
+
+<div class={`${columnClasses[columns]} gap-4`}>
+  {images.map((image, index) => (
+    <figure class="mb-4 break-inside-avoid">
+      <Image
+        src={image.src}
+        alt={image.alt}
+        widths={[400, 800, 1200]}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        class="w-full rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
+        loading={index < 4 ? 'eager' : 'lazy'}
+        decoding={index < 4 ? 'sync' : 'async'}
+      />
+      {image.caption && (
+        <figcaption class="mt-2 text-sm text-gray-600 text-center">
+          {image.caption}
+        </figcaption>
+      )}
+    </figure>
+  ))}
+</div>
+
+<style>
+  figure {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+</style>

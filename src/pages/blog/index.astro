@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/blog/PostList.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+---
+
+<BaseLayout
+  title="Blog"
+  description="Découvrez mes articles photo hebdomadaires. Galeries, récits de voyage et réflexions sur la photographie."
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+      <p class="text-xl text-gray-600">
+        Chaque semaine, je partage mes dernières photos et les histoires qui les accompagnent.
+      </p>
+    </header>
+
+    <PostList posts={posts} />
+  </div>
+</BaseLayout>

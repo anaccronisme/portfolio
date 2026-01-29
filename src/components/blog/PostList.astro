@@ -1,0 +1,51 @@
+---
+import PostCard from './PostCard.astro';
+
+interface Post {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    pubDate: Date;
+    coverImage: ImageMetadata;
+    coverImageAlt: string;
+    tags?: string[];
+    location?: string;
+    draft?: boolean;
+  };
+}
+
+interface Props {
+  posts: Post[];
+  limit?: number;
+}
+
+const { posts, limit } = Astro.props;
+
+const sortedPosts = posts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const displayedPosts = limit ? sortedPosts.slice(0, limit) : sortedPosts;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  {displayedPosts.map((post) => (
+    <PostCard
+      title={post.data.title}
+      description={post.data.description}
+      pubDate={post.data.pubDate}
+      coverImage={post.data.coverImage}
+      coverImageAlt={post.data.coverImageAlt}
+      slug={post.id}
+      tags={post.data.tags}
+      location={post.data.location}
+    />
+  ))}
+</div>
+
+{displayedPosts.length === 0 && (
+  <p class="text-center text-gray-500 py-12">
+    Aucun article pour le moment. Revenez bientôt !
+  </p>
+)}

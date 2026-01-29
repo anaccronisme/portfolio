@@ -1,0 +1,148 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import MasonryGallery from '../components/gallery/MasonryGallery.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import { Image } from 'astro:assets';
+
+interface GalleryImage {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  coverImage: ImageMetadata;
+  coverImageAlt: string;
+  gallery?: GalleryImage[];
+  tags?: string[];
+  location?: string;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  coverImage,
+  coverImageAlt,
+  gallery = [],
+  tags = [],
+  location,
+} = Astro.props;
+
+const formattedPubDate = pubDate.toLocaleDateString('fr-FR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedUpdatedDate = updatedDate?.toLocaleDateString('fr-FR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const coverImageUrl = coverImage.src;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={coverImageUrl}
+  imageAlt={coverImageAlt}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  author="Photographe"
+>
+  <JsonLd
+    type="BlogPosting"
+    data={{
+      title,
+      description,
+      image: new URL(coverImageUrl, Astro.site).toString(),
+      publishedTime: pubDate.toISOString(),
+      modifiedTime: updatedDate?.toISOString(),
+      author: 'Photographe',
+      siteName: 'Portfolio',
+      logo: new URL('/favicon.svg', Astro.site).toString(),
+      url: Astro.url.toString(),
+    }}
+  />
+
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <header class="mb-8">
+      <div class="flex flex-wrap items-center gap-2 text-sm text-gray-500 mb-4">
+        <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
+        {updatedDate && (
+          <>
+            <span>•</span>
+            <span>Mis à jour le {formattedUpdatedDate}</span>
+          </>
+        )}
+        {location && (
+          <>
+            <span>•</span>
+            <span>{location}</span>
+          </>
+        )}
+      </div>
+
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        {title}
+      </h1>
+
+      <p class="text-xl text-gray-600">
+        {description}
+      </p>
+
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-4">
+          {tags.map((tag) => (
+            <span class="px-3 py-1 text-sm bg-primary-50 text-primary-700 rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="mb-12">
+      <Image
+        src={coverImage}
+        alt={coverImageAlt}
+        widths={[800, 1200, 1600]}
+        sizes="(max-width: 1024px) 100vw, 1024px"
+        class="w-full rounded-lg shadow-lg"
+        loading="eager"
+      />
+    </div>
+
+    <div class="prose mb-12">
+      <slot />
+    </div>
+
+    {gallery.length > 0 && (
+      <section class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Galerie</h2>
+        <MasonryGallery images={gallery} columns={3} />
+      </section>
+    )}
+
+    <footer class="mt-12 pt-8 border-t border-gray-200">
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Retour aux articles
+      </a>
+    </footer>
+  </article>
+</BaseLayout>

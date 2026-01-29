@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  coverImage: ImageMetadata;
+  coverImageAlt: string;
+  slug: string;
+  tags?: string[];
+  location?: string;
+}
+
+const { title, description, pubDate, coverImage, coverImageAlt, slug, tags = [], location } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('fr-FR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="group">
+  <a href={`/blog/${slug}`} class="block">
+    <div class="overflow-hidden rounded-lg mb-4">
+      <Image
+        src={coverImage}
+        alt={coverImageAlt}
+        widths={[400, 800]}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        class="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="space-y-2">
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        {location && (
+          <>
+            <span>•</span>
+            <span>{location}</span>
+          </>
+        )}
+      </div>
+
+      <h2 class="text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+        {title}
+      </h2>
+
+      <p class="text-gray-600 line-clamp-2">
+        {description}
+      </p>
+
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 pt-2">
+          {tags.slice(0, 3).map((tag) => (
+            <span class="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </a>
+</article>
